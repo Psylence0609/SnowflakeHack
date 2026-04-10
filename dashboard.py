@@ -1,6 +1,6 @@
 import streamlit as st
 from data import load_countries
-import tab_overview, tab_forecasts, tab_reports
+import tab_overview, tab_forecasts, tab_reports, tab_data_quality
 import chatbot
 
 def render():
@@ -189,7 +189,7 @@ def render():
     if "active_tab" not in st.session_state:
         st.session_state.active_tab = "Overview"
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Forecasts", "Feature Reports", "🤖 Cortex Analyst"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Overview", "Forecasts", "Feature Reports", "Data Quality", "🤖 Cortex Analyst"])
 
     with tab1:
         st.session_state.active_tab = "Overview"
@@ -204,5 +204,9 @@ def render():
         tab_reports.render(country)
 
     with tab4:
+        st.session_state.active_tab = "Data Quality"
+        tab_data_quality.render()
+
+    with tab5:
         st.session_state.active_tab = "Cortex Analyst"
         chatbot.render(country=country, active_tab=st.session_state.get("active_tab", "Overview"))

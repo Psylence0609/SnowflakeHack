@@ -2,9 +2,10 @@
 
 This project builds an end-to-end COVID analytics stack on Snowflake and serves it through a Streamlit dashboard with a Cortex Analyst assistant.
 
+Track: Social Good Prompt 01: Public health trend intelligence — ML forecasting + Cortex AI
 ## Demo
 
-- Demo link: [Add your demo URL here](#)
+- Demo link: [https://drive.google.com/file/d/1Og7r8xABc4YTlVWIR-jsoA_ZEP6sKkMy/view?usp=sharing](#)
 
 ## Tech Stack
 
@@ -15,6 +16,13 @@ This project builds an end-to-end COVID analytics stack on Snowflake and serves 
 - App framework: Streamlit
 - Visualization: Plotly + Streamlit native components
 - Conversational analytics: Snowflake Cortex Analyst via semantic view `HACKATHON.SG01.FIRST`
+
+## Open Source Packages Used
+
+- `streamlit`: Builds the interactive dashboard UI and app layout.
+- `plotly`: Powers interactive forecast and trend visualizations.
+- `pandas`: Handles tabular transformations before rendering tables/charts.
+- `snowflake-snowpark-python`: Connects Python app code to Snowflake data and SQL execution.
 
 ## Architecture Diagram
 
@@ -88,7 +96,13 @@ The pipeline produces and serves these key outputs:
 A semantic view is attached for Cortex Analyst (`HACKATHON.SG01.FIRST`), and the Streamlit app serves:
 
 - Interactive country-level dashboards (overview, forecasts, reports)
-- A Cortex Analyst chatbot that acts as a support agent for analytical Q&A
+- A Cortex Analyst agent that acts as a support agent for analytical Q&A. It does more than summarize countries and reports.
+
+## Fairness Note
+
+The dashboard includes a **Data Quality** tab that explicitly surfaces potential data issues and bias signals.
+It shows country-level data gaps (missing days, null percentages, expected vs. actual coverage) and bias indicators
+from `HACKATHON.SG01.DATA_QUALITY_REPORT` and `HACKATHON.SG01.BIAS_FLAGS`.
 
 ## Run the App
 

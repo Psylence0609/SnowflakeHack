@@ -107,3 +107,21 @@ def load_risk_tiers() -> pd.DataFrame:
         ORDER BY AVG_RISK_SCORE DESC
     """).to_pandas()
     return df
+
+@st.cache_data(ttl=300)
+def load_data_quality_report() -> pd.DataFrame:
+    session = get_session()
+    df = session.sql("""
+        SELECT *
+        FROM HACKATHON.SG01.DATA_QUALITY_REPORT
+    """).to_pandas()
+    return df
+
+@st.cache_data(ttl=300)
+def load_bias_flags() -> pd.DataFrame:
+    session = get_session()
+    df = session.sql("""
+        SELECT *
+        FROM HACKATHON.SG01.BIAS_FLAGS
+    """).to_pandas()
+    return df
