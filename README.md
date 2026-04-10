@@ -5,7 +5,7 @@ This project builds an end-to-end COVID analytics stack on Snowflake and serves 
 Track: Social Good Prompt 01: Public health trend intelligence — ML forecasting + Cortex AI
 ## Demo
 
-- Demo link: [https://drive.google.com/file/d/1Og7r8xABc4YTlVWIR-jsoA_ZEP6sKkMy/view?usp=sharing](#)
+- Demo link: [Demo Video](https://drive.google.com/file/d/1Og7r8xABc4YTlVWIR-jsoA_ZEP6sKkMy/view?usp=sharing)
 
 ## Tech Stack
 
