@@ -34,6 +34,10 @@ def render():
         z-index: 100;
         margin-bottom: 24px;
     }
+    .top-bar-with-back {
+        padding-left: 74px;
+        margin-left: 18px;
+    }
     .top-bar-logo  { display: flex; align-items: center; gap: 12px; }
     .top-bar-name  {
         font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
@@ -44,7 +48,57 @@ def render():
         text-transform: uppercase; letter-spacing: 0.08em;
     }
 
-    /* Back button — white bg, teal border */
+    .top-bar-country {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+        font-size: clamp(2rem, 3.8vw, 3rem);
+        font-weight: 800;
+        color: #01696f;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+    }
+
+    .st-key-back_home {
+        margin-bottom: 12px !important;
+        width: fit-content !important;
+    }
+    .st-key-back_home button {
+        width: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        border-radius: 12px !important;
+        border: none !important;
+        background-color: #01696f !important;
+        color: #ffffff !important;
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .st-key-back_home button p {
+        color: #ffffff !important;
+        font-size: 24px !important;
+        margin: 0 !important;
+    }
+    .st-key-back_home button:hover {
+        background-color: #01575c !important;
+        color: #ffffff !important;
+    }
+
+    .top-bar-with-back {
+        padding-left: 0px;
+    }
+
+    /* KPI Colors */
+    [data-testid="stMetricLabel"] { color: #4a4a4a !important; }
+    [data-testid="stMetricValue"] { color: #4a4a4a !important; }
+
+    /* Back button fallback (if any other normal buttons are built) — white bg, teal border */
     div[data-testid="stButton"] > button {
         background-color: #ffffff !important;
         color: #01696f !important;
@@ -57,6 +111,24 @@ def render():
     }
     div[data-testid="stButton"] > button:hover {
         background-color: #01696f !important;
+        color: #ffffff !important;
+    }
+
+    /* Green dropdowns with white text (country + date selectors) */
+    div[data-baseweb="select"] > div {
+        background: #01696f !important;
+        border: 1px solid #01696f !important;
+    }
+    div[data-baseweb="select"] * {
+        color: #ffffff !important;
+    }
+    div[data-testid="stDateInput"] input {
+        background: #01696f !important;
+        color: #ffffff !important;
+        border: 1px solid #01696f !important;
+    }
+    div[data-testid="stDateInput"] svg {
+        fill: #ffffff !important;
         color: #ffffff !important;
     }
 
@@ -146,8 +218,13 @@ def render():
     """, unsafe_allow_html=True)
 
     # ── Top bar ──────────────────────────────────────────────────────────────
-    st.markdown("""
-    <div class="top-bar">
+    st.markdown('<div class="top-bar-anchor"></div>', unsafe_allow_html=True)
+    if st.button("←", key="back_home", help="Back to Home"):
+        st.session_state.page = "hero"
+        st.rerun()
+
+    st.markdown(f"""
+    <div class="top-bar top-bar-with-back">
       <div class="top-bar-logo">
         <svg width="32" height="32" viewBox="0 0 48 48" fill="none" aria-label="logo">
           <rect width="48" height="48" rx="10" fill="#01696f"/>
@@ -163,11 +240,12 @@ def render():
           <div class="top-bar-sub">Powered by Snowflake Cortex</div>
         </div>
       </div>
+            <div class="top-bar-country">{st.session_state.get('country_select', 'Argentina')}</div>
     </div>
     """, unsafe_allow_html=True)
 
     # ── Country selector row ─────────────────────────────────────────────────
-    col_sel, col_back, col_spacer = st.columns([2, 1, 5])
+    col_sel, col_spacer = st.columns([2, 6])
 
     with col_sel:
         country = st.selectbox(
@@ -177,14 +255,6 @@ def render():
             label_visibility="collapsed",
             key="country_select"
         )
-
-    with col_back:
-        if st.button("Back to Home", key="back_home"):
-            st.session_state.page = "hero"
-            st.rerun()
-
-    # Country heading
-    st.markdown(f'<div class="country-heading">{country}</div>', unsafe_allow_html=True)
 
     # ── Main layout + optional right chat pane ─────────────────────────────
     if "active_tab" not in st.session_state:

@@ -59,7 +59,7 @@ def _chart(actual: pd.DataFrame, forecast: pd.DataFrame,
             showarrow=False,
             xanchor="left",
             yanchor="bottom",
-            font=dict(size=11, color="#9a9a9a", family="Satoshi"),
+            font=dict(size=11, color="#4a4a4a", family="Satoshi"),
             bgcolor="rgba(255,255,255,0.8)",
             borderpad=3
         )
@@ -72,12 +72,12 @@ def _chart(actual: pd.DataFrame, forecast: pd.DataFrame,
                     font=dict(size=12, family="Satoshi"),
                     bgcolor="rgba(0,0,0,0)"),
         xaxis=dict(showgrid=False,
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a"),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a"),
                    rangeslider=dict(visible=False)),
         yaxis=dict(showgrid=True, gridcolor="rgba(0,0,0,0.05)",
                    title=y_label,
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a"),
-                   title_font=dict(size=11, family="Satoshi", color="#9a9a9a"),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a"),
+                   title_font=dict(size=11, family="Satoshi", color="#4a4a4a"),
                    tickformat=",")
     )
     return fig
@@ -101,12 +101,12 @@ def render(country: str):
 
     st.markdown("""
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
             <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
         <span style="font-size:12px;font-weight:700;text-transform:uppercase;
-            letter-spacing:0.1em;color:#6b6b6b;">Date Range</span>
+            letter-spacing:0.1em;color:#4a4a4a;">Date Range</span>
     </div>
     """, unsafe_allow_html=True)
 

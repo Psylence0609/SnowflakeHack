@@ -116,6 +116,16 @@ def render():
         display: flex;
         justify-content: center;
     }
+
+    .st-key-open_dashboard_btn button {
+        background: #01696f !important;
+        color: #ffffff !important;
+        border: none !important;
+    }
+    .st-key-open_dashboard_btn button:hover {
+        background: #01575c !important;
+        color: #ffffff !important;
+    }
     </style>
 
     <div class="hero-wrap">
@@ -172,6 +182,6 @@ def render():
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        if st.button("Open Dashboard", use_container_width=True, type="primary"):
+        if st.button("Open Dashboard", key="open_dashboard_btn", use_container_width=True):
             st.session_state.page = "dashboard"
             st.rerun()

@@ -20,7 +20,7 @@ def render(country: str):
     risk_score = r_row["AVG_RISK_SCORE"].values[0] if len(r_row) else "N/A"
 
     # ── Risk Banner ────────────────────────────────────────────────────────
-    tc = TIER_COLOR.get(tier, "#6b6b6b")
+    tc = TIER_COLOR.get(tier, "#4a4a4a")
     tb = TIER_BG.get(tier, "#f5f5f5")
     st.markdown(f"""
     <div style="
@@ -31,7 +31,7 @@ def render(country: str):
         <div>
             <span style="font-size:12px;font-weight:700;text-transform:uppercase;
                 letter-spacing:0.1em;color:{tc};">{tier} RISK</span>
-            <span style="font-size:13px;color:#6b6b6b;margin-left:16px;">
+            <span style="font-size:13px;color:#4a4a4a;margin-left:16px;">
                 30-day forecast: <strong style="color:#1a1a1a;">{trend}</strong>
             </span>
         </div>
@@ -115,9 +115,9 @@ def render(country: str):
         plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
         showlegend=False,
         xaxis=dict(showgrid=False, showticklabels=True,
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a")),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a")),
         yaxis=dict(showgrid=True, gridcolor="rgba(0,0,0,0.05)",
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a"),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a"),
                    tickformat=",")
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -128,7 +128,7 @@ def render(country: str):
     <div style="background:#f9f9f9;border:1px solid rgba(0,0,0,0.07);
         border-radius:10px;padding:20px 24px;margin-top:8px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;
-            letter-spacing:0.1em;color:#9a9a9a;margin-bottom:10px;">
+            letter-spacing:0.1em;color:#4a4a4a;margin-bottom:10px;">
             Composite Risk Score
         </div>
         <div style="display:flex;align-items:center;gap:16px;">

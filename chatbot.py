@@ -93,6 +93,38 @@ def render(country: str, active_tab: str) -> None:
             border-top: 1px solid rgba(0,0,0,0.06);
         }
 
+        div[data-testid="stChatInput"] {
+            background: #ffffff !important;
+        }
+
+        div[data-testid="stChatInput"] > div {
+            background: #ffffff !important;
+            border: 1px solid #d6e2e2 !important;
+        }
+
+        div[data-testid="stChatInput"] input,
+        div[data-testid="stChatInput"] textarea {
+            background: #ffffff !important;
+            color: #4a4a4a !important;
+        }
+
+        div[data-testid="stChatInput"] input::placeholder,
+        div[data-testid="stChatInput"] textarea::placeholder {
+            color: #7a7a7a !important;
+        }
+
+        div[data-testid="stChatInput"] button {
+            background: #ffffff !important;
+            color: #4a4a4a !important;
+            border: 1px solid #d6e2e2 !important;
+        }
+
+        [data-testid="stChatMessageContent"] p,
+        [data-testid="stChatMessageContent"] li,
+        [data-testid="stChatMessageContent"] span {
+            color: #4a4a4a !important;
+        }
+
         div[data-testid="stForm"] {
             background: #ffffff;
             padding-top: 10px;

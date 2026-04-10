@@ -16,26 +16,26 @@ NAVY   = "#005f94"
 MUTED  = "rgba(0,0,0,0.05)"
 
 def _section(title: str, subtitle: str = ""):
-    sub_html = f"<p style='font-size:13px;color:#9a9a9a;margin:4px 0 0;'>{subtitle}</p>" if subtitle else ""
+    sub_html = f"<p style='font-size:13px;color:#4a4a4a;margin:4px 0 0;'>{subtitle}</p>" if subtitle else ""
     st.markdown(f"""
     <div style="margin:32px 0 16px;">
         <h3 style="font-size:16px;font-weight:700;font-family:'Cabinet Grotesk',sans-serif;
-            color:#1a1a1a;margin:0;">{title}</h3>
+            color:#01696f;margin:0;">{title}</h3>
         {sub_html}
     </div>
     """, unsafe_allow_html=True)
 
 def _base_layout(title="", height=300):
     return dict(
-        title=dict(text=title, font=dict(size=13, family="Satoshi", color="#1a1a1a"), x=0),
+        title=dict(text=title, font=dict(size=13, family="Satoshi", color="#01696f"), x=0),
         height=height, margin=dict(l=0, r=0, t=40 if title else 8, b=0),
         plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
         legend=dict(orientation="h", y=1.14, x=0,
                     font=dict(size=11, family="Satoshi"), bgcolor="rgba(0,0,0,0)"),
         xaxis=dict(showgrid=False,
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a")),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a")),
         yaxis=dict(showgrid=True, gridcolor=MUTED,
-                   tickfont=dict(size=11, family="Satoshi", color="#9a9a9a"),
+                   tickfont=dict(size=11, family="Satoshi", color="#4a4a4a"),
                    tickformat=","),
     )
 
@@ -188,7 +188,7 @@ def chart_cases_14d_ago(df):
     ))
     fig.add_trace(go.Scatter(
         x=df["DATE"], y=df["CASES_14D_AGO"],
-        mode="lines", line=dict(color="#9a9a9a", width=1.5, dash="dot"), name="Cases 14d Ago"
+        mode="lines", line=dict(color="#4a4a4a", width=1.5, dash="dot"), name="Cases 14d Ago"
     ))
     fig.update_layout(**_base_layout(height=280))
     st.plotly_chart(fig, use_container_width=True)
@@ -241,7 +241,7 @@ def chart_vax_features(vdf):
     if "VAX_COVERAGE_14D_LAG" in vdf.columns:
         fig.add_trace(go.Scatter(
             x=vdf["DATE"], y=vdf["VAX_COVERAGE_14D_LAG"],
-            mode="lines", line=dict(color="#9a9a9a", width=1.5, dash="dot"),
+            mode="lines", line=dict(color="#4a4a4a", width=1.5, dash="dot"),
             name="Coverage (14d lag)"
         ))
     fig.update_layout(**_base_layout(height=300))
