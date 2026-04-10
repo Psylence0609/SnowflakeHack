@@ -18,27 +18,14 @@ This project builds an end-to-end COVID analytics stack on Snowflake and serves 
 
 ## Architecture Diagram
 
-![Architecture](Architecture.png)
+![Architecture](Images/Architecture.png)
 
-## UI Preview Carousel
+## UI Preview
 
-<marquee behavior="scroll" direction="left" scrollamount="8">
-  <img src="Images/img4.png" alt="Dashboard Preview 4" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img1.png" alt="Dashboard Preview 1" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img2.png" alt="Dashboard Preview 2" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img3.png" alt="Dashboard Preview 3" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img4.png" alt="Dashboard Preview 4" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img1.png" alt="Dashboard Preview 1" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img2.png" alt="Dashboard Preview 2" width="520" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Images/img3.png" alt="Dashboard Preview 3" width="520" />
-</marquee>
+|  |  |
+|---|---|
+| ![Dashboard Preview 4](Images/img4.png) | ![Dashboard Preview 1](Images/img1.png) |
+| ![Dashboard Preview 2](Images/img2.png) | ![Dashboard Preview 3](Images/img3.png) |
 
 
 ## 1) Data Procurement and Curation
