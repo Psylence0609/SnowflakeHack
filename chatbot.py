@@ -44,45 +44,6 @@ def render(country: str, active_tab: str) -> None:
             line-height: 1.45;
         }
 
-        .chat-header-title {
-            font-size: 16px;
-            font-weight: 800;
-            color: #1a1a1a;
-            line-height: 1.2;
-            margin: 0;
-        }
-
-        .chat-header-sub {
-            font-size: 11px;
-            color: #7a7a7a;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 4px;
-        }
-
-        .chat-inline-close {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .chat-inline-close button {
-            background: #f5fbfb !important;
-            color: #01696f !important;
-            border: 1px solid #bfe3e4 !important;
-            border-radius: 8px !important;
-            font-weight: 700 !important;
-            min-height: 34px !important;
-            min-width: 34px !important;
-            width: 34px !important;
-            padding: 0 !important;
-            font-size: 18px !important;
-        }
-
-        .chat-inline-close button:hover {
-            background: #01696f !important;
-            color: #ffffff !important;
-        }
-
         div[data-testid="stChatInput"] {
             background: #ffffff !important;
         }
@@ -119,27 +80,12 @@ def render(country: str, active_tab: str) -> None:
         unsafe_allow_html=True,
     )
 
-    header_left, header_right = st.columns([3.6, 1.2], vertical_alignment="top")
-    with header_left:
-        st.markdown('<p class="chat-header-title">Cortex Chatbot</p>', unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="chat-header-sub">{country} • {active_tab}</div>',
-            unsafe_allow_html=True,
-        )
-
-    with header_right:
-        st.markdown('<div class="chat-inline-close">', unsafe_allow_html=True)
-        if st.button("✕", key="close_chat_panel_inline"):
-            st.session_state.chat_panel_open = False
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
     if st.button("Clear chat", key="clear_chat_history"):
         st.session_state.chat_messages = []
         st.session_state.chatbot_memory = {}
         st.rerun()
 
-    msg_pane = st.container(height=650, border=False)
+    msg_pane = st.container(border=False)
 
     with msg_pane:
         messages = st.session_state.get("chat_messages", [])

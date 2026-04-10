@@ -4,9 +4,6 @@ import tab_overview, tab_forecasts, tab_reports
 import chatbot
 
 def render():
-    if "chat_panel_open" not in st.session_state:
-        st.session_state.chat_panel_open = False
-
     if "chat_messages" not in st.session_state:
         st.session_state.chat_messages = []
 
@@ -146,74 +143,6 @@ def render():
     /* Hide selectbox label */
     label[data-testid="stWidgetLabel"] { display: none !important; }
 
-    /* Divider between main and chat panel */
-    .chat-divider {
-        border-left: 1px solid rgba(0,0,0,0.08);
-        padding-left: 1.25rem;
-    }
-
-    /* Right pane shell */
-    div[data-testid="stVerticalBlock"] div[data-testid="stContainer"][data-stale="false"] {
-        scroll-margin-top: 80px;
-    }
-
-    .chat-pane-marker + div[data-testid="stContainer"] {
-        min-height: 82vh;
-    }
-
-    /* Floating chat button (always visible) */
-    div[data-testid="stButton"] > button[kind="primary"] {
-        position: fixed !important;
-        right: 18px !important;
-        bottom: 86px !important;
-        z-index: 1200 !important;
-        width: 64px !important;
-        height: 64px !important;
-        border-radius: 999px !important;
-        background: #159a67 !important;
-        color: #ffffff !important;
-        border: none !important;
-        box-shadow: 0 12px 28px rgba(21, 154, 103, 0.35) !important;
-        padding: 0 !important;
-        font-size: 30px !important;
-        line-height: 1 !important;
-        min-height: 64px !important;
-    }
-
-    div[data-testid="stButton"] > button[kind="primary"]:hover {
-        background: #118559 !important;
-        color: #ffffff !important;
-        transform: translateY(-2px) scale(1.03);
-    }
-
-    .chat-close-btn button {
-        background: #f5fbfb !important;
-        color: #01696f !important;
-        border: 1px solid #bfe3e4 !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        padding: 3px 10px !important;
-        min-height: 32px !important;
-    }
-
-    .chat-close-btn button:hover {
-        background: #01696f !important;
-        color: #ffffff !important;
-    }
-
-    @media (max-width: 900px) {
-        .chat-pane-marker + div[data-testid="stContainer"] {
-            min-height: 68vh;
-        }
-
-        div[data-testid="stButton"] > button[kind="primary"] {
-            right: 18px !important;
-            bottom: 72px !important;
-            width: 58px !important;
-            height: 58px !important;
-            min-height: 58px !important;
-        }
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -256,41 +185,24 @@ def render():
             key="country_select"
         )
 
-    # ── Main layout + optional right chat pane ─────────────────────────────
+    # ── Tabs ───────────────────────────────────────────────────────────────
     if "active_tab" not in st.session_state:
         st.session_state.active_tab = "Overview"
 
-    def render_tabs() -> None:
-        tab1, tab2, tab3 = st.tabs(["Overview", "Forecasts", "Feature Reports"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Forecasts", "Feature Reports", "🤖 Cortex Analyst"])
 
-        with tab1:
-            st.session_state.active_tab = "Overview"
-            tab_overview.render(country)
+    with tab1:
+        st.session_state.active_tab = "Overview"
+        tab_overview.render(country)
 
-        with tab2:
-            st.session_state.active_tab = "Forecasts"
-            tab_forecasts.render(country)
+    with tab2:
+        st.session_state.active_tab = "Forecasts"
+        tab_forecasts.render(country)
 
-        with tab3:
-            st.session_state.active_tab = "Feature Reports"
-            tab_reports.render(country)
+    with tab3:
+        st.session_state.active_tab = "Feature Reports"
+        tab_reports.render(country)
 
-    if st.session_state.get("chat_panel_open", False):
-        main_col, chat_col = st.columns([3.2, 1.25], gap="medium")
-        with main_col:
-            render_tabs()
-
-        with chat_col:
-            st.markdown('<div class="chat-pane-marker"></div>', unsafe_allow_html=True)
-            pane = st.container(border=True)
-            with pane:
-                chatbot.render(
-                    country=country,
-                    active_tab=st.session_state.get("active_tab", "Overview")
-                )
-    else:
-        render_tabs()
-
-        if st.button("🤖", key="open_chat_fab", type="primary"):
-            st.session_state.chat_panel_open = True
-            st.rerun()
+    with tab4:
+        st.session_state.active_tab = "Cortex Analyst"
+        chatbot.render(country=country, active_tab=st.session_state.get("active_tab", "Overview"))

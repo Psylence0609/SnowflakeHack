@@ -117,10 +117,32 @@ def render():
         justify-content: center;
     }
 
+    /* Hero page: zero out block-container */
+    .block-container {
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-top: 0 !important;
+    }
+    /* Center the button column itself */
+    .st-key-open_dashboard_btn {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    .st-key-open_dashboard_btn > div {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
     .st-key-open_dashboard_btn button {
         background: #01696f !important;
         color: #ffffff !important;
         border: none !important;
+        width: 240px !important;
+        max-width: 240px !important;
+        margin: 0 auto !important;
+        display: block !important;
     }
     .st-key-open_dashboard_btn button:hover {
         background: #01575c !important;
@@ -180,8 +202,6 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("Open Dashboard", key="open_dashboard_btn", use_container_width=True):
-            st.session_state.page = "dashboard"
-            st.rerun()
+    if st.button("Open Dashboard", key="open_dashboard_btn"):
+        st.session_state.page = "dashboard"
+        st.rerun()
