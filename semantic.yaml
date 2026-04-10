@@ -1,0 +1,258 @@
+name: covid_intelligence_model
+description: >
+  COVID-19 Public Health Intelligence semantic model covering case trends,
+  mortality, vaccination coverage, ML forecasts, and country risk tiers
+  across 10 countries from 2020 to 2023.
+
+tables:
+  - name: covid_death_features
+    description: Daily COVID-19 case and death metrics with engineered features per country
+    base_table:
+      database: HACKATHON
+      schema: SG01
+      table: COVID_DEATH_FEATURES
+    dimensions:
+      - name: country
+        synonyms: ["nation", "country_region", "region", "location"]
+        description: Country name
+        expr: COUNTRY_REGION
+        data_type: TEXT
+        is_enum: true
+      - name: is_wave_period
+        description: Whether the date falls within an active outbreak wave (1=yes, 0=no)
+        expr: IS_WAVE_PERIOD
+        data_type: NUMBER
+      - name: is_local_peak
+        description: Whether this date was a local peak in new cases
+        expr: IS_LOCAL_PEAK
+        data_type: NUMBER
+      - name: risk_score_category
+        synonyms: ["risk level", "danger level"]
+        description: Risk score binned into HIGH / MODERATE / LOW
+        expr: >
+          CASE
+            WHEN RISK_SCORE >= 40 THEN 'HIGH'
+            WHEN RISK_SCORE >= 20 THEN 'MODERATE'
+            ELSE 'LOW'
+          END
+        data_type: TEXT
+    time_dimensions:
+      - name: date
+        synonyms: ["day", "report_date", "timestamp"]
+        description: Date of the COVID report
+        expr: DATE
+        data_type: DATE
+        unique: false
+    facts:
+      - name: new_cases
+        synonyms: ["daily cases", "daily confirmed", "new confirmed cases"]
+        description: New confirmed COVID-19 cases on this date
+        expr: NEW_CASES
+        data_type: NUMBER
+      - name: new_deaths
+        synonyms: ["daily deaths", "fatalities today"]
+        description: New COVID-19 deaths on this date
+        expr: NEW_DEATHS
+        data_type: NUMBER
+      - name: rolling_7day_cases
+        synonyms: ["7-day average", "rolling average", "smoothed cases"]
+        description: 7-day rolling average of new cases
+        expr: ROLLING_7DAY_CASES
+        data_type: NUMBER
+      - name: rolling_7day_deaths
+        synonyms: ["7-day death average", "smoothed deaths"]
+        description: 7-day rolling average of new deaths
+        expr: ROLLING_7DAY_DEATHS
+        data_type: NUMBER
+      - name: cfr_pct
+        synonyms: ["case fatality rate", "mortality rate", "death rate"]
+        description: Case fatality rate as a percentage of confirmed cases
+        expr: CFR_PCT
+        data_type: NUMBER
+      - name: wow_growth_pct
+        synonyms: ["week over week growth", "weekly growth rate", "growth rate"]
+        description: Week-over-week percentage change in new cases
+        expr: WOW_GROWTH_PCT
+        data_type: NUMBER
+      - name: cases_per_100k
+        synonyms: ["normalized cases", "cases per capita", "population adjusted cases"]
+        description: Cumulative cases per 100,000 population — use for cross-country comparisons
+        expr: CASES_PER_100K
+        data_type: NUMBER
+      - name: deaths_per_100k
+        synonyms: ["normalized deaths", "deaths per capita"]
+        description: Cumulative deaths per 100,000 population
+        expr: DEATHS_PER_100K
+        data_type: NUMBER
+      - name: risk_score
+        synonyms: ["composite risk", "outbreak severity score"]
+        description: Composite risk score combining growth rate, CFR, and wave status
+        expr: RISK_SCORE
+        data_type: NUMBER
+    metrics:
+      - name: total_deaths
+        synonyms: ["cumulative deaths", "total fatalities"]
+        description: Cumulative total deaths as of a given date
+        expr: MAX(TOTAL_DEATHS)
+        data_type: NUMBER
+      - name: total_cases
+        synonyms: ["cumulative cases", "total confirmed"]
+        description: Cumulative total confirmed cases as of a given date
+        expr: MAX(TOTAL_CASES)
+        data_type: NUMBER
+      - name: avg_cfr
+        synonyms: ["average mortality rate", "mean case fatality rate"]
+        description: Average case fatality rate over the selected period
+        expr: AVG(CFR_PCT)
+        data_type: NUMBER
+      - name: avg_wow_growth
+        synonyms: ["average weekly growth"]
+        description: Average week-over-week growth rate over the selected period
+        expr: AVG(WOW_GROWTH_PCT)
+        data_type: NUMBER
+
+  - name: covid_vaccines_features
+    description: Daily vaccination metrics per country with lag features
+    base_table:
+      database: HACKATHON
+      schema: SG01
+      table: COVID_VACCINES_FEATURES
+    dimensions:
+      - name: country
+        synonyms: ["nation", "country_region", "location"]
+        description: Country name
+        expr: COUNTRY_REGION
+        data_type: TEXT
+        is_enum: true
+    time_dimensions:
+      - name: date
+        description: Date of vaccination report
+        expr: DATE
+        data_type: DATE
+    facts:
+      - name: new_vaccinations
+        synonyms: ["daily doses", "vaccines administered today"]
+        description: New vaccinations administered on this date
+        expr: NEW_VACCINATIONS
+        data_type: NUMBER
+      - name: vax_coverage_14d_lag
+        synonyms: ["effective vaccination coverage", "lagged vaccinations"]
+        description: Vaccination count from 14 days ago — reflects immunization effect
+        expr: VAX_COVERAGE_14D_LAG
+        data_type: NUMBER
+    metrics:
+      - name: total_vaccinated
+        synonyms: ["people vaccinated", "total doses"]
+        description: Total people who received at least one dose
+        expr: MAX(TOTAL_VACCINATED)
+        data_type: NUMBER
+      - name: total_fully_vaccinated
+        synonyms: ["fully vaccinated", "complete vaccination"]
+        description: Total people who completed full vaccination course
+        expr: MAX(TOTAL_FULLY_VACCINATED)
+        data_type: NUMBER
+
+  - name: country_risk_tiers
+    description: Country-level risk assessment and 30-day forecast trend
+    base_table:
+      database: HACKATHON
+      schema: SG01
+      table: COUNTRY_RISK_TIERS
+    dimensions:
+      - name: country
+        synonyms: ["nation", "location"]
+        description: Country name
+        expr: COUNTRY_REGION
+        data_type: TEXT
+        is_enum: true
+      - name: risk_tier
+        synonyms: ["risk level", "danger category", "outbreak severity"]
+        description: Risk classification — HIGH, MODERATE, or LOW
+        expr: RISK_TIER
+        data_type: TEXT
+        is_enum: true
+      - name: forecast_trend
+        synonyms: ["outlook", "trajectory", "trend direction"]
+        description: 30-day forecast direction — Rising, Stable, or Declining
+        expr: FORECAST_TREND
+        data_type: TEXT
+    facts:
+      - name: avg_risk_score
+        synonyms: ["risk score", "composite risk"]
+        description: Average composite risk score over the last 30 days
+        expr: AVG_RISK_SCORE
+        data_type: NUMBER
+      - name: avg_cfr_pct
+        synonyms: ["mortality rate"]
+        description: Average case fatality rate over last 30 days
+        expr: AVG_CFR_PCT
+        data_type: NUMBER
+      - name: avg_wow_growth_pct
+        synonyms: ["growth rate"]
+        description: Average week-over-week case growth rate
+        expr: AVG_WOW_GROWTH_PCT
+        data_type: NUMBER
+
+relationships:
+  - name: death_features_to_vaccines
+    left_table: covid_death_features
+    right_table: covid_vaccines_features
+    relationship_columns:
+      - left_column: COUNTRY_REGION
+        right_column: COUNTRY_REGION
+      - left_column: DATE
+        right_column: DATE
+
+  - name: death_features_to_risk_tiers
+    left_table: covid_death_features
+    right_table: country_risk_tiers
+    relationship_columns:
+      - left_column: COUNTRY_REGION
+        right_column: COUNTRY_REGION
+
+verified_queries:
+  - name: highest_risk_countries
+    question: Which countries have the highest risk tier right now?
+    use_as_onboarding_question: true
+    sql: >
+      SELECT COUNTRY_REGION, RISK_TIER, AVG_RISK_SCORE, FORECAST_TREND
+      FROM HACKATHON.SG01.COUNTRY_RISK_TIERS
+      ORDER BY AVG_RISK_SCORE DESC
+
+  - name: cases_per_100k_comparison
+    question: Compare cases per 100k population across all countries
+    use_as_onboarding_question: true
+    sql: >
+      SELECT COUNTRY_REGION, MAX(CASES_PER_100K) AS cases_per_100k,
+             MAX(DEATHS_PER_100K) AS deaths_per_100k
+      FROM HACKATHON.SG01.COVID_DEATH_FEATURES
+      GROUP BY COUNTRY_REGION
+      ORDER BY cases_per_100k DESC
+
+  - name: vaccination_coverage
+    question: What is the total vaccination coverage per country?
+    use_as_onboarding_question: true
+    sql: >
+      SELECT COUNTRY_REGION,
+             MAX(TOTAL_VACCINATED) AS total_vaccinated,
+             MAX(TOTAL_FULLY_VACCINATED) AS total_fully_vaccinated
+      FROM HACKATHON.SG01.COVID_VACCINES_FEATURES
+      GROUP BY COUNTRY_REGION
+      ORDER BY total_vaccinated DESC
+
+  - name: wave_periods
+    question: Which countries experienced outbreak waves and when?
+    sql: >
+      SELECT COUNTRY_REGION, DATE, ROLLING_7DAY_CASES, IS_WAVE_PERIOD
+      FROM HACKATHON.SG01.COVID_DEATH_FEATURES
+      WHERE IS_WAVE_PERIOD = 1
+      ORDER BY COUNTRY_REGION, DATE
+
+  - name: peak_cases_by_country
+    question: When did each country hit its peak daily cases?
+    use_as_onboarding_question: true
+    sql: >
+      SELECT COUNTRY_REGION, DATE AS peak_date, ROLLING_7DAY_CASES AS peak_7day_avg
+      FROM HACKATHON.SG01.COVID_DEATH_FEATURES
+      WHERE IS_LOCAL_PEAK = 1
+      ORDER BY ROLLING_7DAY_CASES DESC
