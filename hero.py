@@ -177,7 +177,7 @@ def render():
                 <span class="accent">Intelligence Platform</span>
             </h1>
             <p class="hero-desc">
-                ML-powered forecasting and risk analysis across 10 countries.
+                ML-powered forecasting and risk analysis across 19 countries.
                 Built on Snowflake Cortex with real epidemiological data.
             </p>
         </div>
